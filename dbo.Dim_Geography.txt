@@ -1,0 +1,19 @@
+CREATE TABLE dbo.Dim_Geography (
+    Geo_Key BIGINT IDENTITY, 
+    Province_Code INT,    --
+    Region_Name VARCHAR(100),
+    Coverage_Type VARCHAR(100), -- 
+    Data_Source VARCHAR(100)  -- 
+);
+
+-- Step 2: Add Primary Key
+ALTER TABLE dbo.Dim_Geography ADD CONSTRAINT PK_Dim_Geography PRIMARY KEY NONCLUSTERED (Geo_Key) NOT ENFORCED;
+
+-- Step 3: Insert unique records
+INSERT INTO dbo.Dim_Geography (Province_Code, Region_Name, Coverage_Type, Data_Source)
+SELECT DISTINCT 
+    CAST(Province_Code AS INT), 
+    CAST(Region AS VARCHAR(100)), 
+    CAST(Coverage AS VARCHAR(100)), 
+    CAST(Source AS VARCHAR(100))
+FROM dbo.golden_data;

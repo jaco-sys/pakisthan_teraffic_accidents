@@ -1,0 +1,29 @@
+CREATE TABLE dbo.Fact_Accidents (
+    Fact_Key BIGINT IDENTITY,
+    Geo_Key BIGINT,
+    Time_Key BIGINT,
+    Total_Accidents INT,
+    Fatal_Accidents INT,
+    Killed_Count INT,
+    Injured_Count INT,
+    Vehicles_Involved INT,
+    Fatality_Rate FLOAT
+);
+
+-- 2. Add PK constraint
+ALTER TABLE dbo.Fact_Accidents ADD CONSTRAINT PK_Fact PRIMARY KEY NONCLUSTERED (Fact_Key) NOT ENFORCED;
+
+-- 3. Load Fact data - FIXED COLUMN NAMES
+INSERT INTO dbo.Fact_Accidents (Geo_Key, Time_Key, Total_Accidents, Fatal_Accidents, Killed_Count, Injured_Count, Vehicles_Involved, Fatality_Rate)
+SELECT 
+    g.Geo_Key, 
+    t.Time_Key,
+    src.[Total_Accidents],     
+    src.[Fatal_Accidents],  
+    src.[Killed],              
+    src.[Injured],         
+    src.[Total_Vehicles_Involved],      
+    src.[Fatality_Rate]       
+FROM dbo.golden_data src
+JOIN dbo.Dim_Geography g ON src.[Province_Code] = g.Province_Code -- Use 'Province_Code' instead of 'Province_...'
+JOIN dbo.Dim_Time t ON src.[Year] = t.Year_Label;

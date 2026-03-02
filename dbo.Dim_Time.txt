@@ -1,0 +1,15 @@
+CREATE TABLE dbo.Dim_Time (
+    Time_Key BIGINT IDENTITY,
+    Year_Label VARCHAR(20),
+    Year_Type VARCHAR(20)
+);
+
+-- 2. Add Constraint
+ALTER TABLE dbo.Dim_Time ADD CONSTRAINT PK_Time PRIMARY KEY NONCLUSTERED (Time_Key) NOT ENFORCED;
+
+-- 3. Load Data
+INSERT INTO dbo.Dim_Time (Year_Label, Year_Type)
+SELECT DISTINCT 
+    CAST(Year AS VARCHAR(20)),
+    CAST(Year_Type AS VARCHAR(20))
+FROM dbo.golden_data;
