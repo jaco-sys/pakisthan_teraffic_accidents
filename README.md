@@ -1,1 +1,1 @@
-# pakisthan_teraffic_accidents_analysis
+# pakisthan_traffic_accidents_analysis
